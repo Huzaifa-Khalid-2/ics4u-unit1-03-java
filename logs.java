@@ -1,71 +1,134 @@
+/*
+* This program calculates microwave times from item and quantity
+*
+* @author  Huzaifa Khalid
+* @version 1.0
+* @since   2020-09-21
+*/
+
 import java.util.Scanner;
+
 /**
- * The program calculates the time needs to cook food.
- *
- * @author  Yiyun Qin
- * @version 2.0
- * @since   2022-09-23
- */
+* This is a microwave time calculator.
+*/
+final class MicrowaveTime {
 
-class Food {
-  public static void main(String[] args) {
-    final int maxFood = 3;
-    final int timeSubMinute = 1;
-    final int timeSubSec = 0;
-    final int timePizzaMinute = 0;
-    final int timePizzaSec = 45;
-    final int timeSoupMinute = 1;
-    final int timeSoupSec = 45;
-    int foodTimeMinute = -1;
-    int foodTimeSec = -1;
-    final int aMinute = 60;
-    String foodType;
-    double multipleDouble;
-    int multiple;
+    /**
+    * Constant assigned to 1.
+    */
+    public static final int SUB_TIME = 60;
 
+    /**
+    * Constant assigned to 2.
+    */
+    public static final int SOUP_TIME = 105;
 
-    Scanner myobj = new Scanner(System.in);
-    System.out.print("Which food do you want to heat, sub, pizza or soup?: ");
-    foodType = myobj.nextLine();
-    System.out.print("How many " + foodType + "(s) are you cooking?(max 3): ");
-    String foodNumberString = myobj.nextLine();
+    /**
+    * Constant assigned to 3.
+    */
+    public static final int PIZZA_TIME = 45;
 
-    try {
-      int foodNumber = Integer.parseInt(foodNumberString);
-      if (foodNumber > maxFood) {
-        System.out.println("\nThe maximum quantity of food is 3.");
-      } else if (foodNumber <= 0) {
-        System.out.println("\nPlease enter a positive number!");
-      } else {
-        if (foodType.equals("sub")) {
-          foodTimeMinute = foodNumber * timeSubMinute;
-          foodTimeSec = foodNumber * timeSubSec;
-        } else if (foodType.equals("pizza")) {
-          foodTimeMinute = foodNumber * timePizzaMinute;
-          foodTimeSec = foodNumber * timePizzaSec;
-        } else if (foodType.equals("soup")) {
-          foodTimeMinute = foodNumber * timeSoupMinute;
-          foodTimeSec = foodNumber * timeSoupSec;
-        } else {
-          System.out.println("\nPlease choose a food in options!");
-        }
-      }
-      if (foodTimeMinute >= 0 && foodTimeSec >= 0) {
-        if (foodTimeSec >= aMinute) {
-          multipleDouble = foodTimeSec / aMinute;
-          multiple = (int) Math.floor(multipleDouble);
-          foodTimeMinute = foodTimeMinute + multiple;
-          foodTimeSec = foodTimeSec - multiple * aMinute;
-        }
-        System.out.println(
-            "\nThe total cook time is " + foodTimeMinute + " minutes and "
-            + foodTimeSec + " seconds."
-        );
-      }
-    } catch (Exception e) {
-      System.out.println("\nInvalid food number!");
-    } finally {
-      System.out.println("\nDone.");
+    /**
+    * Constant assigned to 1.
+    */
+    public static final int ONE = 1;
+
+    /**
+    * Constant assigned to 1.5.
+    */
+    public static final double ONE_AND_HALF = 1.5;
+
+    /**
+    * Constant assigned to 2.
+    */
+    public static final int TWO = 2;
+
+    /**
+    * Constant assigned to 3.
+    */
+    public static final int THREE = 3;
+
+    /**
+    * Constant assigned to 60.
+    */
+    public static final int SIXTY = 60;
+
+    /**
+    * Prevent instantiation.
+    * Throw an exception IllegalStateException.
+    * if this ever is called
+    *
+    * @throws IllegalStateException
+    *
+    */
+    private MicrowaveTime() {
+        throw new IllegalStateException("Cannot be instantiated");
     }
-  }
+
+    /**
+    * The starting main() function.
+    *
+    * @param args No args will be used
+    */
+    public static void main(final String[] args) {
+        // Time determined variables
+        double time = 0;
+        double percent = 0;
+        double minutes = 0;
+        double seconds = 0;
+
+        /*
+        * Try-catch to ensure bad
+        * input won't crash the program
+        */
+        try {
+            // Input
+            final Scanner foodObj = new Scanner(System.in);
+            System.out.println(
+                "What are you microwaving? "
+                + "(1 for sub, 2 for soup, 3 for pizza): "
+            );
+            final float food = foodObj.nextInt();
+            final Scanner quantityObj = new Scanner(System.in);
+            System.out.println(
+                "How many would you like to microwave? (max is 3): "
+            );
+            final float quantity = quantityObj.nextInt();
+
+            // Process
+            if (food == ONE) {
+                time = SUB_TIME;
+            } else if (food == TWO) {
+                time = SOUP_TIME;
+            } else if (food == THREE) {
+                time = PIZZA_TIME;
+            } else {
+                System.out.println("\nInvalid Input for First Prompt.");
+            }
+
+            if (quantity == ONE) {
+                percent = ONE;
+            } else if (quantity == TWO) {
+                percent = ONE_AND_HALF;
+            } else if (quantity == THREE) {
+                percent = TWO;
+            } else {
+                System.out.println("\nInvalid Input for Second Prompt.");
+            }
+
+            time = time * percent;
+            seconds = time % SIXTY;
+            minutes = Math.floor(time / SIXTY);
+
+            // Output
+            if (time > 0) {
+                System.out.println("\nSet minutes to " + minutes
+                                + " and seconds to " + seconds + ".");
+            }
+        } catch (java.util.InputMismatchException ex) {
+            System.out.println("\nInvalid Input.");
+        } finally {
+            System.out.println("\nDone.");
+        }
+    }
 }
