@@ -1,56 +1,71 @@
-/*
- * The program shows how to get input
- *   and deal with numbers.
+import java.util.Scanner;
+/**
+ * The program calculates the time needs to cook food.
  *
- * @author  Huzaifa Khalid
- * @version 1.0
- * @since   2022-09-14
+ * @author  Yiyun Qin
+ * @version 2.0
+ * @since   2022-09-23
  */
 
-import java.io.Console;
+class Food {
+  public static void main(String[] args) {
+    final int maxFood = 3;
+    final int timeSubMinute = 1;
+    final int timeSubSec = 0;
+    final int timePizzaMinute = 0;
+    final int timePizzaSec = 45;
+    final int timeSoupMinute = 1;
+    final int timeSoupSec = 45;
+    int foodTimeMinute = -1;
+    int foodTimeSec = -1;
+    final int aMinute = 60;
+    String foodType;
+    double multipleDouble;
+    int multiple;
 
-/**
-* This is the log calculator program.
-*/
-final class LogCalculator {
-    /**
-     * Maximum capacity of the truck
-     */
-    public static final float truckCapacity = 1100;
 
-    /**
-     * Average weight of maple logs
-     */
-    public static final float mapleWeight = 20;
-    /**
-    * Prevent instantiation.
-    * Throw an exception IllegalStateException.
-    * if this ever is called
-    *
-    * @throws IllegalStateException
-    *
-    */
-    private LogCalculator() {
-        throw new IllegalStateException("Cannot be instantiated");
+    Scanner myobj = new Scanner(System.in);
+    System.out.print("Which food do you want to heat, sub, pizza or soup?: ");
+    foodType = myobj.nextLine();
+    System.out.print("How many " + foodType + "(s) are you cooking?(max 3): ");
+    String foodNumberString = myobj.nextLine();
+
+    try {
+      int foodNumber = Integer.parseInt(foodNumberString);
+      if (foodNumber > maxFood) {
+        System.out.println("\nThe maximum quantity of food is 3.");
+      } else if (foodNumber <= 0) {
+        System.out.println("\nPlease enter a positive number!");
+      } else {
+        if (foodType.equals("sub")) {
+          foodTimeMinute = foodNumber * timeSubMinute;
+          foodTimeSec = foodNumber * timeSubSec;
+        } else if (foodType.equals("pizza")) {
+          foodTimeMinute = foodNumber * timePizzaMinute;
+          foodTimeSec = foodNumber * timePizzaSec;
+        } else if (foodType.equals("soup")) {
+          foodTimeMinute = foodNumber * timeSoupMinute;
+          foodTimeSec = foodNumber * timeSoupSec;
+        } else {
+          System.out.println("\nPlease choose a food in options!");
+        }
+      }
+      if (foodTimeMinute >= 0 && foodTimeSec >= 0) {
+        if (foodTimeSec >= aMinute) {
+          multipleDouble = foodTimeSec / aMinute;
+          multiple = (int) Math.floor(multipleDouble);
+          foodTimeMinute = foodTimeMinute + multiple;
+          foodTimeSec = foodTimeSec - multiple * aMinute;
+        }
+        System.out.println(
+            "\nThe total cook time is " + foodTimeMinute + " minutes and "
+            + foodTimeSec + " seconds."
+        );
+      }
+    } catch (Exception e) {
+      System.out.println("\nInvalid food number!");
+    } finally {
+      System.out.println("\nDone.");
     }
-
-    /**
-    * The starting main() function.
-    *
-    * @param args No args will be used
-    */
-    public static void main(final String[] args) {
-
-        final Console console = System.console();
-        final String logLengthString = console.readLine(
-                "How long are the logs(m) : ");
-
-        final float logLength = Float.valueOf(logLengthString);
-
-        final float logAmount = truckCapacity / (mapleWeight * logLength);
-
-        // print out answer
-        System.out.println(logAmount + " Logs ca fit in the truck ");
-        System.out.println("\nDone.");
-    }
+  }
 }
